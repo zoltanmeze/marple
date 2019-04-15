@@ -84,7 +84,7 @@ public class PointsResource {
 				throw new WebApplicationException("No points data for field", Response.Status.NOT_FOUND);
 	        }
 	
-	        final int numDims = points.getNumDimensions();
+	        final int numDims = points.getNumIndexDimensions();
 	        final int bytesPerDim = points.getBytesPerDimension();
 	        checkEncoding(encoding, bytesPerDim);
 	
@@ -112,7 +112,7 @@ public class PointsResource {
         LeafReader reader = readerManager.getLeafReader(segment);
         PointValues points = reader.getPointValues(field);
 
-        final int numDims = points.getNumDimensions();
+        final int numDims = points.getNumIndexDimensions();
         final int bytesPerDim = points.getBytesPerDimension();
         if (bytesPerDim != 4 && bytesPerDim != 8) {
             String msg = String.format("Points data for field %s has %d bytes per dimension",

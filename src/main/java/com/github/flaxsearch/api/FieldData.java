@@ -57,7 +57,7 @@ public class FieldData {
         this.indexOptions = fieldInfo.getIndexOptions();
         this.hasNorms = fieldInfo.hasNorms();
         this.docValuesType = fieldInfo.getDocValuesType();
-        this.pointDimensionCount = fieldInfo.getPointDimensionCount();
+        this.pointDimensionCount = fieldInfo.getPointIndexDimensionCount();
         this.hasPayloads = fieldInfo.hasPayloads();
         this.hasTerms = hasTerms;
     }
