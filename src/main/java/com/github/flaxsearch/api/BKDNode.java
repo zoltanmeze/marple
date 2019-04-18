@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import org.apache.lucene.util.FutureArrays;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.StringHelper;
 
@@ -70,10 +71,11 @@ public class BKDNode {
     public boolean contains(BKDNode node, int numDims, int bytesPerDim) {
         for (int i = 0; i < numDims; i++) {
             int offset = i * bytesPerDim;
-            int cMin = StringHelper.compare(bytesPerDim, minPackedValue, offset,
-                                            node.minPackedValue, offset);
-            int cMax = StringHelper.compare(bytesPerDim, maxPackedValue, offset,
-                                            node.maxPackedValue, offset);
+            int cMin = FutureArrays.compareUnsigned(minPackedValue, offset, offset + bytesPerDim, 
+            		node.minPackedValue, offset, offset + bytesPerDim);
+
+            int cMax = FutureArrays.compareUnsigned(maxPackedValue, offset, offset + bytesPerDim,
+            		node.maxPackedValue, offset, offset + bytesPerDim);
             if (cMin > 0 || cMax < 0) return false;
         }
         return true;
@@ -95,7 +97,9 @@ public class BKDNode {
 
     static class Serializer extends StdSerializer<BKDNode> {
 
-        protected Serializer() {
+		private static final long serialVersionUID = 1L;
+
+		protected Serializer() {
             super(BKDNode.class);
         }
 

@@ -29,13 +29,13 @@ public interface ReaderManager {
 
     default Terms getTerms(Integer segment, String field) throws IOException {
         if (segment == null)
-            return MultiFields.getFields(getIndexReader()).terms(field);
+            return MultiTerms.getTerms(getIndexReader(), field);
         return getLeafReader(segment).terms(field);
     }
 
     default FieldInfos getFieldInfos(Integer segment) throws IOException {
         if (segment == null)
-            return MultiFields.getMergedFieldInfos(getIndexReader());
+        	return FieldInfos.getMergedFieldInfos(getIndexReader());
         return getLeafReader(segment).getFieldInfos();
     }
 
@@ -45,7 +45,7 @@ public interface ReaderManager {
 
     default Bits getLiveDocs(Integer segment) throws IOException {
         if (segment == null)
-            return MultiFields.getLiveDocs(getIndexReader());
+        	return MultiBits.getLiveDocs(getIndexReader());
         return getLeafReader(segment).getLiveDocs();
     }
 

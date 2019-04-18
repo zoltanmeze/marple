@@ -28,6 +28,7 @@ import com.github.flaxsearch.api.PointsData;
 import com.github.flaxsearch.util.ReaderManager;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.PointValues;
+import org.apache.lucene.util.FutureArrays;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.StringHelper;
 
@@ -162,11 +163,11 @@ public class PointsResource {
             private boolean isContained(byte[] thisValue) {
                 for (int i = 0; i < numDims; i++) {
                     int offset = i * bytesPerDim;
-                    boolean failsMin = minQueryValue != null && StringHelper.compare(
-                            bytesPerDim, thisValue, offset, minQueryValue, offset) < 0;
+                    boolean failsMin = minQueryValue != null && FutureArrays.compareUnsigned(
+                    		thisValue, offset, offset + bytesPerDim, minQueryValue, offset, offset + bytesPerDim) < 0;
 
-                    boolean failsMax = maxQueryValue != null && StringHelper.compare(
-                            bytesPerDim, thisValue, offset, maxQueryValue, offset) > 0;
+                    boolean failsMax = maxQueryValue != null && FutureArrays.compareUnsigned(
+                    		thisValue, offset, offset + bytesPerDim, maxQueryValue, offset, offset + bytesPerDim) > 0;
 
                     if (failsMin || failsMax) return false;
                 }
